@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/node22/tsconfig.json",
-  "include": ["src"],
+  "include": ["src", "src/knexfile.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "module": "commonjs",
