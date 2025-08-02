@@ -32,6 +32,10 @@ class AuthController extends ApiController {
                     first_name: body.first_name,
                     last_name: body.last_name,
                     email: body.email,
+                    gender: body.gender,
+                    phone: body.phone,
+                    address: body.address,
+                    dob: body.dob,
                     status: USER_STATUS.ACTIVE
                 }
                 const { token } = await createNewUser(userData, body.password);

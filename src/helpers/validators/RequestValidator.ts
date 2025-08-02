@@ -9,6 +9,7 @@ class RequestValidator extends RouterMiddleware {
     constructor(appRouter: Router) {
         super(appRouter);
     }
+    
 
     validateBody = (schema: AnySchema) => {
         return async ( req: Request, res: Response, next: NextFunction ) => {

@@ -1,9 +1,14 @@
 import Joi from "joi";
+import { GENDER } from "../../data/enums/enum";
 
 const signUp = Joi.object({
     first_name: Joi.string().max(50).required(),
     last_name: Joi.string().max(50).required(),
     email: Joi.string().email().required(),
+    gender: Joi.string().valid(Object.values(GENDER)).required(),
+    phone: Joi.string().required(),
+    address: Joi.string().required(),
+    dob: Joi.date(),
     new_password: Joi.string().required(),
     confirm_password: Joi.string().required()
 });
