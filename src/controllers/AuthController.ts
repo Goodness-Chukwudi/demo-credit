@@ -35,7 +35,7 @@ class AuthController extends ApiController {
                     gender: body.gender,
                     phone: body.phone,
                     address: body.address,
-                    dob: body.dob,
+                    dob: new Date(body.dob),
                     status: USER_STATUS.ACTIVE
                 }
                 const { token } = await createNewUser(userData, body.password);
@@ -44,7 +44,7 @@ class AuthController extends ApiController {
                     token: token
                 }
 
-                return this.handleSuccess(res, response, 201);
+                this.handleSuccess(res, response, 201);
             } catch (error:any) {
                 this.handleError(res, error);
             }
@@ -70,7 +70,7 @@ class AuthController extends ApiController {
                     user: {...user, password: undefined }
                 }
 
-                return this.handleSuccess(res, response);
+                this.handleSuccess(res, response);
             } catch (error:any) {
                 this.handleError(res, error);
             }

@@ -1,6 +1,5 @@
 import { GENDER, USER_STATUS } from "../enums/enum";
 import Model from "./model";
-import Password from "./password";
 
 interface User extends Model {
     first_name: string;
@@ -11,7 +10,8 @@ interface User extends Model {
     address: string;
     dob: Date;
     status: USER_STATUS;
-    password?: Password;
+    password?: string;
+    password_id?: number;
 }
 
 export default User;

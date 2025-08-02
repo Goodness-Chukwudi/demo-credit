@@ -1,7 +1,6 @@
 import RequestValidator from "../helpers/validators/RequestValidator";
 import ApiController from "./base_controllers/ApiController";
 import { loginUser, logoutUser } from "../services/user_service";
-import { USER_PASSWORD_LABEL } from "../common/constants";
 import { passwordUpdate } from "../helpers/validators/validator";
 import { updateUserPassword } from "../services/password_service";
 
@@ -29,7 +28,7 @@ class AppController extends ApiController {
         this.router.get(path, (req, res) => {
             try {
                 const user = this.requestUtils.getRequestUser();
-                this.handleSuccess(res, user); 
+                this.handleSuccess(res, {...user, password: undefined}); 
             } catch (error: any) {
                 this.handleError(res, error);
             }
@@ -60,9 +59,7 @@ class AppController extends ApiController {
         this.router.patch(path, async (req, res) => {
             try {
                 const user = this.requestUtils.getRequestUser();
-                const previousPassword = this.requestUtils.getDataFromState(USER_PASSWORD_LABEL);
-
-                await updateUserPassword(user, req.body.password, previousPassword);
+                await updateUserPassword(user, req.body.password);
 
                 await logoutUser(user.id);
                 const token = await loginUser(user.id);

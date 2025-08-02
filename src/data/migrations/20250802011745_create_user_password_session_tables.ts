@@ -34,11 +34,11 @@ exports.up = async function (knex: Knex) {
     if (!hasLoginSessionTable) {
         await knex.schema.createTable(TABLES.LoginSession, function (table) {
             addDefaultColumns(table, knex);
-            table.dateTime("expiry_date").notNullable();//.defaultTo(new Date(Date.now() + 86400000)); //1 day
+            table.dateTime("expiry_date").notNullable();
             table.boolean("is_expired").defaultTo(false);
             table.boolean("logged_out").defaultTo(false);
             table.integer("user_id").unsigned().references("id").inTable(TABLES.User);
-            table.enum("status", Object.values(BIT)).defaultTo(BIT.OFF);
+            table.enum("status", Object.values(BIT)).defaultTo(BIT.ON);
         })
     }
 };

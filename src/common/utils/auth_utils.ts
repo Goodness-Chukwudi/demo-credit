@@ -61,6 +61,7 @@ const hashData = (data: string, rounds = 12): Promise<string> => {
 const validateHashedData = (value: string, hashedData: string): Promise<boolean> => {
     return new Promise(async (resolve, reject) => {
         try {
+            if (!value || !hashedData) throw new Error("Either the hashed data or values to compare with it, it not provided");
             const valid = await bcrypt.compare(value, hashedData);
             resolve(valid);
         } catch (error) {

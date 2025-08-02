@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "scripts": {
     "ts-node": "ts-node --transpileOnly ./src/index.ts",
-    "dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run lint && npm run ts-node\"",
+    "dev": "npm run migrate:dev && ./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run lint && npm run ts-node\"",
     "build": "npm run lint && tsc",
     "migrate": "knex --knexfile src/data/knexfile.js migrate:latest --esm",
     "migrate:dev": "ts-node -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile src/data/knexfile.ts migrate:latest",

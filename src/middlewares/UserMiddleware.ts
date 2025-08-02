@@ -2,10 +2,10 @@ import RouterMiddleware from "./base_middlewares/RouterMiddleware";
 import { NextFunction, Request, Response, Router } from 'express';
 import { PASSWORD_STATUS } from "../data/enums/enum";
 import { hashData, validateHashedData } from "../common/utils/auth_utils";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../helpers/errors/app_error";
+import { BadRequestError, UnauthorizedError } from "../helpers/errors/app_error";
 import userRepository from "../repositories/UserRepository";
-import { TABLES, USER_LABEL, USER_PASSWORD_LABEL } from "../common/constants";
-import { EMAIL_REQUIRED, INVALID_LOGIN, NEW_PASSWORD_REQUIRED, PASSWORD_MISMATCH, USER_NOT_FOUND } from "../helpers/errors/error_response";
+import { TABLES, USER_LABEL } from "../common/constants";
+import { EMAIL_REQUIRED, INVALID_LOGIN, NEW_PASSWORD_REQUIRED, PASSWORD_MISMATCH } from "../helpers/errors/error_response";
 import passwordRepository from "../repositories/PasswordRepository";
 import { logoutUser } from "../services/user_service";
 
@@ -25,12 +25,14 @@ class UserMiddleware extends RouterMiddleware {
             if (!email) throw new BadRequestError(EMAIL_REQUIRED);
 
             const joinPassword = {table: TABLES.Password, condition: { "passwords.user_id": "users.id"} };
-            const user = await userRepository.findOne({ email, status: PASSWORD_STATUS.ACTIVE }, { join: joinPassword});
+            const user = await userRepository.findOne(
+                { "users.email": email, "users.status": PASSWORD_STATUS.ACTIVE },
+                { join: joinPassword, select: ["users.*", "passwords.password"]}
+            );
 
-            if (!user) throw new NotFoundError(USER_NOT_FOUND);
+            if (!user) throw new UnauthorizedError(INVALID_LOGIN);
 
             this.requestUtils.addDataToState(USER_LABEL, user);
-            this.requestUtils.addDataToState(USER_PASSWORD_LABEL, user.password);
             next();
         } catch (error: any) {
             this.handleError(res, error)
@@ -48,7 +50,7 @@ class UserMiddleware extends RouterMiddleware {
                 if (req.body.confirm_password !== req.body.new_password) throw new BadRequestError(PASSWORD_MISMATCH);
                 req.body.password = await hashData(req.body.new_password);
     
-                next();
+                return next();
             } 
             throw new BadRequestError(NEW_PASSWORD_REQUIRED);
             
@@ -64,12 +66,8 @@ class UserMiddleware extends RouterMiddleware {
     */
     public validatePassword = async (req: Request, res: Response, next: any) => {
         try {
-            let userPassword = this.requestUtils.getDataFromState(USER_PASSWORD_LABEL);
-            if (!userPassword) {
-                const user = this.requestUtils.getRequestUser();
-                userPassword = await passwordRepository.findOne({email: user.email, status: PASSWORD_STATUS.ACTIVE});
-                this.requestUtils.addDataToState(USER_PASSWORD_LABEL, userPassword);
-            }
+            const user = this.requestUtils.getRequestUser();
+            const userPassword = await passwordRepository.findOne({user_id: user.id, status: PASSWORD_STATUS.ACTIVE});
 
             const isCorrectPassword = await validateHashedData(req.body.password, userPassword.password);
             if (!isCorrectPassword) throw new UnauthorizedError(INVALID_LOGIN);

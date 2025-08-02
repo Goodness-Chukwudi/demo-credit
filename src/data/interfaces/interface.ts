@@ -19,7 +19,7 @@ interface QueryOptions<T> {
         by: string;
         order: "asc"|"desc";
     },
-    select?: [keyof T];
+    select?: string[];
     join?: {
         table: TABLES;
         condition: Record<string, any>

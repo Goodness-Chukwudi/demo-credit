@@ -1,6 +1,7 @@
 import { Response } from "express";
 import { AppError, InternalServerError } from "../../helpers/errors/app_error";
 import { logError } from "../../common/utils/app_utils";
+import { INPUT_VALIDATION_ERROR } from "../../common/constants";
 
 abstract class ResponseHandler {
     
@@ -12,32 +13,43 @@ abstract class ResponseHandler {
      * @param {*} data Optional data to return to client
      * @returns {void} void
     */
-    protected handleError( res: Response, error: Error, data?: unknown) {
+    protected handleError( res: Response, error: Error, data?: any) {
+        try {
+            let statusCode = 500;
+            let errorCode;
 
-        let statusCode = 500;
-        let errorCode;
+            if (error instanceof AppError) {
+                statusCode = error.status_code;
+                errorCode = error.custom_code;
+            }
 
-        if (error instanceof AppError) {
-            statusCode = error.status_code;
-            errorCode = error.custom_code;
-        }
-        const response = {
-            message: error.message,
-            success: false,
-            custom_error_code: errorCode,
-            status_code: statusCode,
-            data: data
-        };
+            let errors;
+            let message = error.message;
+            if (errorCode === 0) {
+                errors = error.message.split(". ");
+                message = INPUT_VALIDATION_ERROR;
+            }
 
-        if (
-            error instanceof InternalServerError ||
-            (error instanceof Error && error.constructor === Error)
-        ) {
+            const response = {
+                message,
+                success: false,
+                error_code: errorCode,
+                errors,
+                status_code: statusCode,
+                data: data
+            };
+
+            if (
+                error instanceof InternalServerError || !(error instanceof AppError)
+            ) {
+                logError(error, res);
+                response.message = "Internal server error. Please try again later or contact support if issue persists";
+            };
+
+            res.status(statusCode).json(response);
+        } catch (error: any) {
             logError(error, res);
-            response.message = "Internal server error. Please try again later or contact support if issue persists";
-        };
-
-        res.status(statusCode).json(response);
+        }
     }
 
     /**
@@ -48,10 +60,10 @@ abstract class ResponseHandler {
      * @param {number} statusCode HTTP status code of the success response
      * @returns  void
     */
-    protected handleSuccess(res: Response, data:any = null, statusCode = 200) {
+    protected handleSuccess(res: Response, data?:any, statusCode = 200) {
         const response = {
             success: true,
-            data: data,
+            data,
             status_code: statusCode,
         }
         res.status(statusCode).json(response);

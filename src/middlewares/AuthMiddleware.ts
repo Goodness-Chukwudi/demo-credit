@@ -39,7 +39,7 @@ export class AuthMiddleware extends RouterMiddleware {
                     this.requestUtils.addDataToState(USER_LABEL, user);
                     this.requestUtils.addDataToState(LOGIN_SESSION_LABEL, loginSession);
 
-                    next();
+                    return next();
                 }
                 
                 throw new UnauthorizedError(INVALID_SESSION_USER);

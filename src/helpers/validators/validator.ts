@@ -5,7 +5,7 @@ const signUp = Joi.object({
     first_name: Joi.string().max(50).required(),
     last_name: Joi.string().max(50).required(),
     email: Joi.string().email().required(),
-    gender: Joi.string().valid(Object.values(GENDER)).required(),
+    gender: Joi.string().valid(...Object.values(GENDER)).required(),
     phone: Joi.string().required(),
     address: Joi.string().required(),
     dob: Joi.date(),

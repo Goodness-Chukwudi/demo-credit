@@ -1,7 +1,7 @@
 
 enum BIT {
-    ON = 1,
-    OFF = 0
+    ON = "1",
+    OFF = "0"
 }
 
 enum USER_STATUS {

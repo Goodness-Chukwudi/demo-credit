@@ -48,7 +48,15 @@ abstract class Repository<T> {
     }
 
     public async findOne(query: Record<string, any>, options?: QueryOptions<T>) {
-        const result = await db(this.table).where(query).select(options?.select || "*").first();
+        let result: T;
+        if (options?.join) {
+            result = await db(this.table)
+            .leftJoin(options.join.table, options.join.condition)
+            .where(query).select(options?.select || "*")
+            .first();
+        } else {
+            result = await db(this.table).where(query).select(options?.select || "*").first();
+        }
 
         return result as T;
     }
@@ -85,9 +93,9 @@ abstract class Repository<T> {
     public async updateById(id: number, update: Partial<T>, trx?: Knex.Transaction) {
         let result: number[];
         if (trx) {
-            result = await trx(this.table).where({id}).update(update);
+            result = await trx(this.table).where({id}).update({ ...update, updated_at: new Date()});
         } else {
-            result = await db(this.table).where({id}).update(update);
+            result = await db(this.table).where({id}).update({ ...update, updated_at: new Date()});
         }
 
         return result[0] as number;
@@ -96,9 +104,9 @@ abstract class Repository<T> {
     public async update(query: Record<string, any>, update: Partial<T>, trx?: Knex.Transaction) {
         let result: number[];
         if (trx) {
-            result = await trx(this.table).where(query).update(update);
+            result = await trx(this.table).where(query).update({ ...update, updated_at: new Date()});
         } else {
-            result = await db(this.table).where(query).update(update);
+            result = await db(this.table).where(query).update({ ...update, updated_at: new Date()});
         }
 
         return result[0] as number;

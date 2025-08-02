@@ -8,7 +8,7 @@ import { Environments } from '../config';
  * @returns {void}
 */
 const recordResponseTime = (req:Request, res:Response, time:number) => {
-    console.log(`${req.method}: ${req.url} => ${time.toFixed(3)} ms `, res.statusCode);
+    console.log(`${req.method}: ${req.originalUrl} => ${time.toFixed(3)} ms `, res.statusCode);
 }
 
 /**

@@ -11,12 +11,7 @@ import passwordRepository from "../repositories/PasswordRepository";
 import userRepository from "../repositories/UserRepository";
 
 const logoutUser = async (userId: number): Promise<LoginSession> => {
-    const activeLoginSession = await loginSessionRepository
-        .findOne({
-            user_id: userId,
-            status: BIT.ON
-        })
-
+    const activeLoginSession = await loginSessionRepository.findOne({ user_id: userId, status: BIT.ON })
     if(activeLoginSession) {
         if (activeLoginSession.expiry_date > new Date()) {
             activeLoginSession.logged_out = true;
@@ -30,7 +25,7 @@ const logoutUser = async (userId: number): Promise<LoginSession> => {
     return activeLoginSession;
  }
 
-const createNewUser = async (user: Partial<User>, passwordHash: string): Promise<{user: Partial<User>, token: string}> => {
+const createNewUser = async (user: Partial<User>, passwordHash: string): Promise<any> => {
     const trx = await db.transaction();
     try {
         const existingUser = await userRepository .findOne({ email: user.email?.toLowerCase() });
@@ -47,7 +42,7 @@ const createNewUser = async (user: Partial<User>, passwordHash: string): Promise
     
         const loginSession: Partial<LoginSession> = {
             user_id: user.id,
-            status: BIT.ON,
+            expiry_date: new Date(Date.now() + 86400000) //1 day
         }
         loginSession.id = await loginSessionRepository.save(loginSession, trx);
         
@@ -67,7 +62,7 @@ const createNewUser = async (user: Partial<User>, passwordHash: string): Promise
 const loginUser = async (userId: number): Promise<string> => {
     const loginSession = {
         user_id: userId,
-        status: BIT.ON,
+        expiry_date: new Date(Date.now() + 86400000) //1 day
     }
     const loginSessionId = await loginSessionRepository.save(loginSession);
     return createAuthToken(userId, loginSessionId);
