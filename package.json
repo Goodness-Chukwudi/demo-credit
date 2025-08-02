@@ -10,7 +10,6 @@
     "migrate": "knex --knexfile src/data/knexfile.js migrate:latest --esm",
     "migrate:dev": "ts-node -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile src/data/knexfile.ts migrate:latest",
     "migrate:make": "knex --knexfile src/data/knexfile.ts migrate:make",
-    
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "jest"
@@ -33,6 +32,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "mysql2": "^3.14.3",
+    "redis": "^5.7.0",
     "response-time": "^2.3.4",
     "winston": "^3.17.0"
   },

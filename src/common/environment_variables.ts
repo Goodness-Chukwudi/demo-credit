@@ -13,6 +13,9 @@ interface IEnv {
     DB_PASSWORD: string;
     DB_NAME: string;
     DB_PORT: number;
+    REDIS_PASSWORD: string;
+    REDIS_HOST: string;
+    REDIS_PORT: number;
 }
 
 
@@ -28,7 +31,10 @@ const Env: IEnv = {
     DB_USER: process.env.DB_USER as string,
     DB_PASSWORD: process.env.DB_PASSWORD as string,
     DB_NAME: process.env.DB_NAME as string,
-    DB_PORT: process.env.DB_PORT as unknown as number
+    DB_PORT: process.env.DB_PORT as unknown as number,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
+    REDIS_HOST: process.env.REDIS_HOST as string,
+    REDIS_PORT: process.env.REDIS_PORT as unknown as number
 }
 
 export default Env;
