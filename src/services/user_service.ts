@@ -1,10 +1,12 @@
+import { USER_SESSION } from "../common/constants";
 import { createAuthToken } from "../common/utils/auth_utils";
+import { deleteCache, setCache } from "../common/utils/cache_manager";
 import LoginSession from "../data/entities/login_session";
 import Password from "../data/entities/password";
 import User from "../data/entities/user";
 import { BIT } from "../data/enums/enum"
 import { db } from "../helpers/db/db";
-import { BadRequestError, InternalServerError } from "../helpers/errors/app_error";
+import { BadRequestError } from "../helpers/errors/app_error";
 import { DUPLICATE_EMAIL } from "../helpers/errors/error_response";
 import loginSessionRepository from "../repositories/LoginSessionRepository"
 import passwordRepository from "../repositories/PasswordRepository";
@@ -21,6 +23,8 @@ const logoutUser = async (userId: number): Promise<LoginSession> => {
         activeLoginSession.status = BIT.OFF;
         await loginSessionRepository.updateById(activeLoginSession.id, activeLoginSession);
     }
+
+    await deleteCache(USER_SESSION+userId)
 
     return activeLoginSession;
  }
@@ -39,17 +43,8 @@ const createNewUser = async (user: Partial<User>, passwordHash: string): Promise
             user_id: user.id
         }
         await passwordRepository.save(password, trx);
-    
-        const loginSession: Partial<LoginSession> = {
-            user_id: user.id,
-            expiry_date: new Date(Date.now() + 86400000) //1 day
-        }
-        loginSession.id = await loginSessionRepository.save(loginSession, trx);
-        
-        const token = createAuthToken(user.id, loginSession.id);
-        if (!user || !token) throw new InternalServerError();
-
         await trx.commit();
+        const token = await loginUser(user.id);
     
         return { user, token };
     } catch (error) {
@@ -65,6 +60,8 @@ const loginUser = async (userId: number): Promise<string> => {
         expiry_date: new Date(Date.now() + 86400000) //1 day
     }
     const loginSessionId = await loginSessionRepository.save(loginSession);
+    const activeSession = await loginSessionRepository.findById(loginSessionId);
+    await setCache(USER_SESSION+userId, activeSession);
     return createAuthToken(userId, loginSessionId);
 }
 
