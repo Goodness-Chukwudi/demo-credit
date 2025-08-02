@@ -17,8 +17,14 @@ enum PASSWORD_STATUS {
     DELETED = "deleted"
 }
 
+enum GENDER {
+    MALE = "male",
+    FEMALE = "female"
+}
+
 export {
     BIT,
     USER_STATUS,
-    PASSWORD_STATUS
+    PASSWORD_STATUS,
+    GENDER
 }

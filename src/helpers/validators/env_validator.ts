@@ -17,6 +17,7 @@ function validateEnvironmentVariables() {
             DB_USER: Joi.string().required(),
             DB_PASSWORD: Joi.string().required(),
             DB_NAME: Joi.string().required(),
+            DB_PORT: Joi.string().required()
         });
         
         const response = EnvSchema.validate(Env, { allowUnknown: false, abortEarly: false });

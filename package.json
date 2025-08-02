@@ -7,8 +7,10 @@
     "ts-node": "ts-node --transpileOnly ./src/index.ts",
     "dev": "./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run lint && npm run ts-node\"",
     "build": "npm run lint && tsc",
-    "migrate": "knex --knexfile knexfile.ts migrate:latest",
+    "migrate": "knex --knexfile src/data/knexfile.js migrate:latest --esm",
+    "migrate:dev": "ts-node -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile src/data/knexfile.ts migrate:latest",
     "migrate:make": "knex --knexfile src/data/knexfile.ts migrate:make",
+    
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "jest"
