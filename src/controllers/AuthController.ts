@@ -1,7 +1,7 @@
 import ApiController from "./base_controllers/ApiController";
 import RequestValidator from "../helpers/validators/RequestValidator";
 import { createNewUser, loginUser } from "../services/user_service";
-import { login, signUp } from "../helpers/validators/validator";
+import { login, signUp } from "../helpers/validators/validators";
 import { USER_STATUS } from "../data/enums/enum";
 
 class AuthController extends ApiController {

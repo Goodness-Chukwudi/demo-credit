@@ -16,6 +16,7 @@ interface IEnv {
     REDIS_PASSWORD: string;
     REDIS_HOST: string;
     REDIS_PORT: number;
+    KARMA_API_KEY: string;
 }
 
 
@@ -34,7 +35,8 @@ const Env: IEnv = {
     DB_PORT: process.env.DB_PORT as unknown as number,
     REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
     REDIS_HOST: process.env.REDIS_HOST as string,
-    REDIS_PORT: process.env.REDIS_PORT as unknown as number
+    REDIS_PORT: process.env.REDIS_PORT as unknown as number,
+    KARMA_API_KEY: process.env.KARMA_API_KEY as string
 }
 
 export default Env;

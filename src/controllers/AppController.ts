@@ -1,7 +1,7 @@
 import RequestValidator from "../helpers/validators/RequestValidator";
 import ApiController from "./base_controllers/ApiController";
 import { loginUser, logoutUser } from "../services/user_service";
-import { passwordUpdate } from "../helpers/validators/validator";
+import { passwordUpdate } from "../helpers/validators/validators";
 import { updateUserPassword } from "../services/password_service";
 
 class AppController extends ApiController {
