@@ -1,4 +1,4 @@
-import { BIT, PASSWORD_STATUS } from "../enums/enum";
+import { BIT } from "../enums/enum";
 import Model from "./model";
 
 interface LoginSession extends Model {
