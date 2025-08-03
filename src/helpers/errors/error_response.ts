@@ -44,6 +44,11 @@ const DUPLICATE_EMAIL = {
     message: "A user with this email already exist, please try a different email"
 }
 
+const BLACKLISTED_USER = {
+    code: 9,
+    message: "This user's record exist on Karma's blacklist"
+}
+
 export {
     SESSION_EXPIRED,
     INVALID_TOKEN,
@@ -53,5 +58,6 @@ export {
     PASSWORD_MISMATCH,
     NEW_PASSWORD_REQUIRED,
     INVALID_LOGIN,
-    DUPLICATE_EMAIL
+    DUPLICATE_EMAIL,
+    BLACKLISTED_USER
 }

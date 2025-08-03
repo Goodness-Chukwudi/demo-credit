@@ -2,12 +2,12 @@ import RouterMiddleware from "./base_middlewares/RouterMiddleware";
 import { NextFunction, Request, Response, Router } from 'express';
 import { PASSWORD_STATUS } from "../data/enums/enum";
 import { hashData, validateHashedData } from "../common/utils/auth_utils";
-import { BadRequestError, UnauthorizedError } from "../helpers/errors/app_error";
+import { BadRequestError, BlacklistedUserError, UnauthorizedError } from "../helpers/errors/app_error";
 import userRepository from "../repositories/UserRepository";
 import { TABLES, USER_LABEL } from "../common/constants";
-import { EMAIL_REQUIRED, INVALID_LOGIN, NEW_PASSWORD_REQUIRED, PASSWORD_MISMATCH } from "../helpers/errors/error_response";
+import { BLACKLISTED_USER, EMAIL_REQUIRED, INVALID_LOGIN, NEW_PASSWORD_REQUIRED, PASSWORD_MISMATCH } from "../helpers/errors/error_response";
 import passwordRepository from "../repositories/PasswordRepository";
-import { logoutUser } from "../services/user_service";
+import { isBlacklisted, logoutUser } from "../services/user_service";
 
 class UserMiddleware extends RouterMiddleware {
 
@@ -87,6 +87,23 @@ class UserMiddleware extends RouterMiddleware {
             
             const user = this.requestUtils.getRequestUser();
             await logoutUser(user.id);
+            next();
+        } catch (error: any) {
+            return this.handleError(res, error);
+        }
+    }
+
+    /**
+     * Checks if any of the users record is blacklisted.
+    */
+    public blacklistCheck = async (req: Request, res: Response, next: any) => {
+        try {
+            let hasBlacklistedRecord = false;
+
+            hasBlacklistedRecord = await isBlacklisted(req.body.email);
+            hasBlacklistedRecord = await isBlacklisted(req.body.phone);
+            
+            if (hasBlacklistedRecord) throw new BlacklistedUserError(BLACKLISTED_USER);
             next();
         } catch (error: any) {
             return this.handleError(res, error);

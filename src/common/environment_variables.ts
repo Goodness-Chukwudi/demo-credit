@@ -17,6 +17,7 @@ interface IEnv {
     REDIS_HOST: string;
     REDIS_PORT: number;
     KARMA_API_KEY: string;
+    ADJUTOR_URL: string;
 }
 
 
@@ -36,7 +37,8 @@ const Env: IEnv = {
     REDIS_PASSWORD: process.env.REDIS_PASSWORD as string,
     REDIS_HOST: process.env.REDIS_HOST as string,
     REDIS_PORT: process.env.REDIS_PORT as unknown as number,
-    KARMA_API_KEY: process.env.KARMA_API_KEY as string
+    KARMA_API_KEY: process.env.KARMA_API_KEY as string,
+    ADJUTOR_URL: process.env.ADJUTOR_URL as string
 }
 
 export default Env;

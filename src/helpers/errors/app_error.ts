@@ -58,6 +58,14 @@ class NotFoundError extends AppError {
   }
 }
 
+class BlacklistedUserError extends AppError {
+  constructor(error: ErrorMessage) {
+    super(error.message);
+    this.status_code = HttpStatus.FORBIDDEN;
+    this.custom_code = error.code;
+  }
+}
+
 export {
     AppError,
     InternalServerError,
@@ -65,5 +73,6 @@ export {
     BadRequestError,
     UnauthorizedError,
     ForbiddenError,
-    NotFoundError
+    NotFoundError,
+    BlacklistedUserError
 }

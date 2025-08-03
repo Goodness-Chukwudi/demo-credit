@@ -1,7 +1,7 @@
-import { ONE_DAY } from "../constants";
+import { ONE_DAY_IN_SECS } from "../constants";
 import redisClient from "./redis";
 
-const setCache = async (key: string, data: any, expiry = ONE_DAY) => {
+const setCache = async (key: string, data: any, expiry = ONE_DAY_IN_SECS ) => {
     try {
         await redisClient.setEx(key, expiry, JSON.stringify(data))
     } catch (error) {

@@ -22,6 +22,7 @@ function validateEnvironmentVariables() {
             REDIS_HOST: Joi.string().required(),
             REDIS_PORT: Joi.number().required(),
             KARMA_API_KEY: Joi.string().required(),
+            ADJUTOR_URL: Joi.string().required(),
         });
         
         const response = EnvSchema.validate(Env, { allowUnknown: false, abortEarly: false });

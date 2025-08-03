@@ -24,7 +24,11 @@ class AuthController extends ApiController {
     }
 
     signup(path:string) {
-        this.router.post(path, this.validator.validateBody(signUp), this.userMiddleWare.hashNewPassword);
+        this.router.post(path,
+            this.validator.validateBody(signUp),
+            this.userMiddleWare.hashNewPassword,
+            this.userMiddleWare.blacklistCheck
+        );
         this.router.post(path, async (req, res) => {
             try {
                 const body = req.body;

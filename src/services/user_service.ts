@@ -1,6 +1,7 @@
-import { USER_SESSION } from "../common/constants";
+import { KARMA_BLACKLIST, ONE_DAY_IN_SECS, ONE_DAY_IN_MILLI_SECS, USER_SESSION } from "../common/constants";
+import Env from "../common/environment_variables";
 import { createAuthToken } from "../common/utils/auth_utils";
-import { deleteCache, setCache } from "../common/utils/cache_manager";
+import { deleteCache, getCache, setCache } from "../common/utils/cache_manager";
 import LoginSession from "../data/entities/login_session";
 import Password from "../data/entities/password";
 import User from "../data/entities/user";
@@ -8,6 +9,7 @@ import { BIT } from "../data/enums/enum"
 import { db } from "../helpers/db/db";
 import { BadRequestError } from "../helpers/errors/app_error";
 import { DUPLICATE_EMAIL } from "../helpers/errors/error_response";
+import HttpService from "../helpers/HttpService";
 import loginSessionRepository from "../repositories/LoginSessionRepository"
 import passwordRepository from "../repositories/PasswordRepository";
 import userRepository from "../repositories/UserRepository";
@@ -53,11 +55,10 @@ const createNewUser = async (user: Partial<User>, passwordHash: string): Promise
     }
 }
 
-
 const loginUser = async (userId: number): Promise<string> => {
     const loginSession = {
         user_id: userId,
-        expiry_date: new Date(Date.now() + 86400000) //1 day
+        expiry_date: new Date(Date.now() + ONE_DAY_IN_MILLI_SECS)
     }
     const loginSessionId = await loginSessionRepository.save(loginSession);
     const activeSession = await loginSessionRepository.findById(loginSessionId);
@@ -65,8 +66,25 @@ const loginUser = async (userId: number): Promise<string> => {
     return createAuthToken(userId, loginSessionId);
 }
 
+const isBlacklisted = async (identity: string): Promise<boolean> => {
+    let data = await getCache(KARMA_BLACKLIST+identity);
+
+    if (!data) {
+        const httpService = new HttpService(Env.ADJUTOR_URL, Env.KARMA_API_KEY);
+        const karmaRecord = await httpService.get(`/verification/karma/${identity}`);
+        if (karmaRecord.status == "success") {
+            data = karmaRecord.data;
+            await setCache(KARMA_BLACKLIST+identity, data, ONE_DAY_IN_SECS);
+        }
+    }
+
+    if (data) return true;
+    return false
+}
+
 export {
     logoutUser,
     createNewUser,
-    loginUser
+    loginUser,
+    isBlacklisted
 }
