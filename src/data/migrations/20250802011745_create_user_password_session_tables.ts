@@ -38,7 +38,7 @@ exports.up = async function (knex: Knex) {
             table.boolean("is_expired").defaultTo(false);
             table.boolean("logged_out").defaultTo(false);
             table.integer("user_id").unsigned().references("id").inTable(TABLES.User);
-            table.enum("status", Object.values(BIT)).defaultTo(BIT.ON);
+            table.integer("status").notNullable().defaultTo(BIT.ON);
         })
     }
 };

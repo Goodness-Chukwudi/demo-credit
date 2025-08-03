@@ -1,6 +1,6 @@
 import Model from "./model";
 
-interface Wallet extends Model {
+interface LockedFund extends Model {
     wallet_id: string;
     user_id: string;
     amount: number;
@@ -12,4 +12,4 @@ interface Wallet extends Model {
     unlocked_by?: number;//admin_id. if the fund was locked by an admin
 }
 
-export default Wallet;
+export default LockedFund;

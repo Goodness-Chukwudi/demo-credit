@@ -9,7 +9,11 @@ const KARMA_BLACKLIST = "KARMA_BLACKLIST:-";
 enum TABLES {
     User = "users",
     Password = "passwords",
-    LoginSession = "login_sessions"
+    LoginSession = "login_sessions",
+    SettlementAccount = "settlement_accounts",
+    LockedFund = "locked_funds",
+    Transaction = "transactions",
+    Wallet = "wallets"
 }
 
 export {
