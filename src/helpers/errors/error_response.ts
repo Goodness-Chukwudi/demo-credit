@@ -53,6 +53,16 @@ const WALLET_NOT_FOUND = {
   message: "This user's wallet was not found"
 };
 
+const INSUFFICIENT_BALANCE = {
+  code: 11,
+  message: "Insufficient balance"
+};
+
+const SETTLEMENT_ACCOUNT_NOT_FOUND = {
+  code: 12,
+  message: "No active settlement account details was found"
+};
+
 export {
   SESSION_EXPIRED,
   INVALID_TOKEN,
@@ -64,5 +74,7 @@ export {
   INVALID_LOGIN,
   DUPLICATE_EMAIL,
   BLACKLISTED_USER,
-  WALLET_NOT_FOUND
+  WALLET_NOT_FOUND,
+  INSUFFICIENT_BALANCE,
+  SETTLEMENT_ACCOUNT_NOT_FOUND
 };

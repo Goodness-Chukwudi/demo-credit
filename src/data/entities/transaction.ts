@@ -39,7 +39,7 @@ interface Transaction extends Model {
   channel: TRANSACTION_CHANNEL;
   status: TRANSACTION_STATUS;
   completed_at?: Date;
-  login_session_id?: string;
+  login_session_id?: number;
 }
 
 export default Transaction;
