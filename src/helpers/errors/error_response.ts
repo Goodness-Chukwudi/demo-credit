@@ -48,6 +48,11 @@ const BLACKLISTED_USER = {
   message: "This user's record exist on Karma's blacklist"
 };
 
+const WALLET_NOT_FOUND = {
+  code: 10,
+  message: "This user's wallet was not found"
+};
+
 export {
   SESSION_EXPIRED,
   INVALID_TOKEN,
@@ -58,5 +63,6 @@ export {
   NEW_PASSWORD_REQUIRED,
   INVALID_LOGIN,
   DUPLICATE_EMAIL,
-  BLACKLISTED_USER
+  BLACKLISTED_USER,
+  WALLET_NOT_FOUND
 };

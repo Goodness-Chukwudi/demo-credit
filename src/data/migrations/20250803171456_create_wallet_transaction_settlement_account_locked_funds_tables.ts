@@ -54,7 +54,7 @@ exports.up = async function (knex: Knex) {
       table
         .integer("settlement_account_id")
         .unsigned()
-        .notNullable()
+        .nullable()
         .references("id")
         .inTable(TABLES.SettlementAccount);
       table.enum("type", Object.values(WALLET_TYPE)).notNullable();

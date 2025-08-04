@@ -10,8 +10,13 @@ import { deleteCache, getCache, setCache } from "../common/utils/cache_manager";
 import LoginSession from "../data/entities/login_session";
 import Password from "../data/entities/password";
 import User from "../data/entities/user";
-import { ACCOUNT_STATUS, BIT } from "../data/enums/enum";
-import { SettlementAccountDTO } from "../data/interfaces/DTOs/auth.dto";
+import {
+  ACCOUNT_STATUS,
+  BIT,
+  WALLET_STATUS,
+  WALLET_TYPE
+} from "../data/enums/enum";
+import { SettlementAccountDTO } from "../data/interfaces/DTOs/app_dto";
 import { db } from "../helpers/db/db";
 import { BadRequestError } from "../helpers/errors/app_error";
 import { DUPLICATE_EMAIL } from "../helpers/errors/error_response";
@@ -20,6 +25,7 @@ import loginSessionRepository from "../repositories/LoginSessionRepository";
 import passwordRepository from "../repositories/PasswordRepository";
 import settlementAccountRepository from "../repositories/SettlementAccountRepository";
 import userRepository from "../repositories/UserRepository";
+import walletRepository from "../repositories/WalletRepository";
 
 const logoutUser = async (userId: number): Promise<LoginSession> => {
   const activeLoginSession = await loginSessionRepository.findOne({
@@ -63,6 +69,19 @@ const createNewUser = async (
       user_id: user.id
     };
     await passwordRepository.save(password, trx);
+
+    const accountDetails = await settlementAccountRepository.findOne({
+      status: ACCOUNT_STATUS.ACTIVE,
+      user_id: user.id
+    });
+
+    const wallet = {
+      user_id: user.id,
+      settlement_account_id: accountDetails?.id,
+      type: WALLET_TYPE.INDIVIDUAL
+    };
+    await walletRepository.save(wallet, trx);
+
     await trx.commit();
     const token = await loginUser(user.id);
 
@@ -100,6 +119,13 @@ const setSettlementAccountDetails = async (
       data,
       trx
     );
+
+    await walletRepository.update(
+      { user_id: userId },
+      { settlement_account_id: settlementAccountId },
+      trx
+    );
+
     await trx.commit();
     return settlementAccountId;
   } catch (error) {

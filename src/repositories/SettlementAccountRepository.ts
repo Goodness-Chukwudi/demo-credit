@@ -1,6 +1,5 @@
 import { TABLES } from "../common/constants";
 import SettlementAccount from "../data/entities/settlement_account";
-import User from "../data/entities/user";
 import Repository from "./Repository";
 
 class SettlementAccountRepository extends Repository<SettlementAccount> {

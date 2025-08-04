@@ -1,11 +1,16 @@
-import { TRANSACTION_CHANNEL, TRANSACTION_STATUS, TRANSACTION_TYPE } from "../enums/enum";
+import {
+  CURRENCY,
+  TRANSACTION_CHANNEL,
+  TRANSACTION_STATUS,
+  TRANSACTION_TYPE
+} from "../enums/enum";
 import Model from "./model";
 
 interface Transaction extends Model {
   // Core transaction values
-  amount: number;
-  charges: number;
-  currency: string;
+  amount: number | string;
+  charges: number | string;
+  currency: CURRENCY;
   description?: string;
   reference: string;
   external_reference?: string;
@@ -19,10 +24,10 @@ interface Transaction extends Model {
   destination_wallet_id?: number;
 
   // Balances before and after transaction
-  source_balance_before?: number;
-  source_balance_after?: number;
-  destination_balance_before?: number;
-  destination_balance_after?: number;
+  source_balance_before?: number | string;
+  source_balance_after?: number | string;
+  destination_balance_before?: number | string;
+  destination_balance_after?: number | string;
 
   // Related records
   settlement_account_id?: number;

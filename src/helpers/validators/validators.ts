@@ -32,4 +32,10 @@ const setSettlementAccount = Joi.object({
   bank_name: Joi.string().required()
 });
 
-export { signUp, login, passwordUpdate, setSettlementAccount };
+const fundWallet = Joi.object({
+  amount: Joi.number().required(),
+  description: Joi.string(),
+  reference: Joi.string()
+});
+
+export { signUp, login, passwordUpdate, setSettlementAccount, fundWallet };
