@@ -4,7 +4,7 @@
   "description": "Demo Credit is a mobile lending app that requires wallet functionality. This is needed as borrowers need a wallet to receive the loans they have been granted and also send the money for repayments.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "npm run build & node ./dist/index.js",
+    "start": "npm run build && node ./dist/index.js",
     "build": "npm run lint && tsc",
     "ts-node": "ts-node --transpileOnly ./src/index.ts",
     "dev": "npm run migrate:dev && ./node_modules/nodemon/bin/nodemon.js -e ts  --exec \"npm run lint && npm run ts-node\"",
