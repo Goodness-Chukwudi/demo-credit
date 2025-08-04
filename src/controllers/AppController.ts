@@ -85,8 +85,8 @@ class AppController extends ApiController {
   setSettlementAccount(path: string) {
     this.router.put(
       path,
-      this.validator.validateBody(setSettlementAccount)
-      // this.userMiddleWare.blacklistCheck
+      this.validator.validateBody(setSettlementAccount),
+      this.userMiddleWare.blacklistCheck
     );
     this.router.put(path, async (req, res) => {
       try {
