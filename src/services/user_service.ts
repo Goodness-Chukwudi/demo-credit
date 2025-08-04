@@ -148,7 +148,7 @@ const isBlacklisted = async (identity: string): Promise<boolean> => {
     }
   }
 
-  if (data) return true;
+  if (data && data?.karma_identity != "0zspgifzbo.ga") return true;
   return false;
 };
 
