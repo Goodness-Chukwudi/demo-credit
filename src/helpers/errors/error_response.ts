@@ -53,13 +53,23 @@ const WALLET_NOT_FOUND = {
   message: "This user's wallet was not found"
 };
 
-const INSUFFICIENT_BALANCE = {
+const SOURCE_WALLET_NOT_FOUND = {
   code: 11,
+  message: "The source wallet for this transaction was not found"
+};
+
+const RECIPIENT_WALLET_NOT_FOUND = {
+  code: 12,
+  message: "The recipient wallet for this transaction was not found"
+};
+
+const INSUFFICIENT_BALANCE = {
+  code: 13,
   message: "Insufficient balance"
 };
 
 const SETTLEMENT_ACCOUNT_NOT_FOUND = {
-  code: 12,
+  code: 14,
   message: "No active settlement account details was found"
 };
 
@@ -76,5 +86,7 @@ export {
   BLACKLISTED_USER,
   WALLET_NOT_FOUND,
   INSUFFICIENT_BALANCE,
-  SETTLEMENT_ACCOUNT_NOT_FOUND
+  SETTLEMENT_ACCOUNT_NOT_FOUND,
+  SOURCE_WALLET_NOT_FOUND,
+  RECIPIENT_WALLET_NOT_FOUND
 };

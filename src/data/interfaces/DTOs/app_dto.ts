@@ -35,10 +35,19 @@ interface fundWalletDTO {
   reference?: string;
 }
 
+interface WalletTransferDTO {
+  sender: number;
+  recipient: number;
+  amount: number;
+  description?: string;
+  reference?: string;
+}
+
 export {
   SettlementAccountDTO,
   SignUpDTO,
   LoginDTO,
   PasswordUpdateDTO,
-  fundWalletDTO
+  fundWalletDTO,
+  WalletTransferDTO
 };

@@ -38,4 +38,18 @@ const fundWallet = Joi.object({
   reference: Joi.string()
 });
 
-export { signUp, login, passwordUpdate, setSettlementAccount, fundWallet };
+const walletTransfer = Joi.object({
+  recipient: Joi.number().required(),
+  amount: Joi.number().required(),
+  description: Joi.string(),
+  reference: Joi.string()
+});
+
+export {
+  signUp,
+  login,
+  passwordUpdate,
+  setSettlementAccount,
+  fundWallet,
+  walletTransfer
+};

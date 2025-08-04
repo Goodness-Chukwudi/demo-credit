@@ -159,7 +159,7 @@ exports.up = async function (knex: Knex) {
       table.datetime("completed_at").nullable();
 
       table.uuid("reference").notNullable().unique();
-      table.string("external_reference").nullable();
+      table.string("external_reference").nullable().unique();
       table
         .integer("login_session_id")
         .unsigned()
